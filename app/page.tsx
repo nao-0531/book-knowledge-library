@@ -199,31 +199,30 @@ export default function BookKnowledgeLibrary() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f5f4f0] font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#0d0d0d]">
 
-      {/* ═══ Pane 1 — サイドバー（ダーク） ═══ */}
-      <div className="w-52 flex-shrink-0 bg-[#0f1f3d] flex flex-col">
+      {/* ═══ Pane 1 — サイドバー ═══ */}
+      <div className="w-52 flex-shrink-0 bg-[#111111] border-r border-white/5 flex flex-col">
         <div className="px-5 pt-6 pb-4">
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.15em] mb-1">My Library</p>
-          <h1 className="text-lg font-bold text-white leading-tight">読書知識</h1>
-          <p className="text-[11px] text-white/40 mt-0.5">{categories.reduce((a, c) => a + c.count, 0)} 冊のライブラリ</p>
+          <p className="text-[10px] font-semibold text-white/20 uppercase tracking-[0.18em] mb-2">My Library</p>
+          <h1 className="text-[16px] font-semibold text-white leading-tight tracking-tight">読書知識</h1>
+          <p className="text-[11px] text-white/30 mt-1">{categories.reduce((a, c) => a + c.count, 0)} 冊</p>
         </div>
 
-        <div className="mx-3 mb-2 h-px bg-white/10" />
+        <div className="mx-4 mb-1 h-px bg-white/5" />
 
-        <ScrollArea className="flex-1 px-2">
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest px-3 pt-3 pb-2">カテゴリ</p>
+        <ScrollArea className="flex-1 px-2 py-2">
           <div className="space-y-0.5">
             {categories.map(cat => (
               <button key={cat.id} onClick={() => selectCategory(cat.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2.5 transition-all ${
+                className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2.5 transition-all ${
                   selectedCategory === cat.id
-                    ? "bg-white/10 text-white"
-                    : "text-white/50 hover:bg-white/5 hover:text-white/80"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : "text-white/40 hover:bg-white/5 hover:text-white/70"
                 }`}>
-                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cat.dot}`} />
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cat.dot} ${selectedCategory === cat.id ? "opacity-100" : "opacity-40"}`} />
                 <span className="text-[13px] font-medium truncate flex-1">{cat.name}</span>
-                <span className={`text-[10px] tabular-nums ${selectedCategory === cat.id ? "text-white/50" : "text-white/25"}`}>
+                <span className={`text-[10px] tabular-nums ${selectedCategory === cat.id ? "text-amber-400/60" : "text-white/20"}`}>
                   {cat.count}
                 </span>
               </button>
@@ -231,107 +230,104 @@ export default function BookKnowledgeLibrary() {
           </div>
         </ScrollArea>
 
-        <div className="px-5 py-4 border-t border-white/10">
-          <p className="text-[11px] text-white/25">読書知識ライブラリ</p>
+        <div className="px-4 py-3 border-t border-white/5">
+          <p className="text-[10px] text-white/15 tracking-wide">Book Knowledge</p>
         </div>
       </div>
 
       {/* ═══ Pane 2 — 本一覧 ═══ */}
-      <div className="w-64 flex-shrink-0 bg-white border-r border-gray-200/80 flex flex-col">
-        <div className="px-4 py-4 flex items-start justify-between border-b border-gray-100">
+      <div className="w-64 flex-shrink-0 bg-[#141414] border-r border-white/5 flex flex-col">
+        <div className="px-4 py-4 flex items-center justify-between border-b border-white/5">
           <div>
-            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Books</p>
-            <h2 className="text-[15px] font-bold text-gray-900 mt-0.5 leading-tight">
+            <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest">Books</p>
+            <h2 className="text-[14px] font-semibold text-white/90 mt-0.5 leading-tight">
               {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name : "カテゴリを選択"}
             </h2>
           </div>
           <button onClick={() => setShowAddBook(true)}
-            className="mt-0.5 w-7 h-7 rounded-full bg-gray-900 text-white flex items-center justify-center text-base hover:bg-gray-700 active:scale-95 transition-all shadow-sm"
+            className="w-6 h-6 rounded-full bg-white/10 text-white/60 flex items-center justify-center text-sm hover:bg-amber-500/20 hover:text-amber-300 active:scale-95 transition-all"
             title="本を追加">+</button>
         </div>
         <ScrollArea className="flex-1">
-          <div className="p-2 space-y-1">
+          <div className="p-2 space-y-0.5">
             {currentBooks.map(book => (
               <button key={book.id} onClick={() => { setSelectedBook(book); setSelectedNote(null); }}
-                className={`w-full text-left p-3 rounded-xl transition-all ${
+                className={`w-full text-left p-2.5 rounded-lg transition-all ${
                   selectedBook?.id === book.id
-                    ? "bg-blue-50 ring-1 ring-blue-200 shadow-sm"
-                    : "hover:bg-gray-50"
+                    ? "bg-amber-500/10 border border-amber-500/20"
+                    : "hover:bg-white/5 border border-transparent"
                 }`}>
                 <div className="flex gap-2.5 items-start">
                   <BookCover title={book.title} author={book.author}
                     categoryId={selectedCategory} coverImage={book.coverImage} size="sm" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-semibold text-gray-900 leading-tight line-clamp-2">{book.title}</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5 truncate">{book.author}</p>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-amber-400 text-[11px] tracking-tight">{"★".repeat(book.rating)}</span>
-                      <span className="text-[10px] text-gray-300">{book.readAt}</span>
+                    <p className="text-[12px] font-medium text-white/85 leading-tight line-clamp-2">{book.title}</p>
+                    <p className="text-[10px] text-white/35 mt-0.5 truncate">{book.author}</p>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-amber-400/80 text-[10px]">{"★".repeat(book.rating)}</span>
+                      <span className="text-[9px] text-white/20">{book.readAt}</span>
                     </div>
                   </div>
                 </div>
               </button>
             ))}
             {currentBooks.length === 0 && (
-              <p className="text-sm text-gray-400 px-3 py-6 text-center">本がありません</p>
+              <p className="text-[12px] text-white/25 px-3 py-6 text-center">本がありません</p>
             )}
           </div>
         </ScrollArea>
       </div>
 
       {/* ═══ Pane 3 — 本の詳細 ═══ */}
-      <div className="w-72 flex-shrink-0 bg-white border-r border-gray-200/80 flex flex-col">
-        <div className="px-4 py-4 border-b border-gray-100">
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Detail</p>
-          <h2 className="text-[15px] font-bold text-gray-900 mt-0.5">本の詳細</h2>
+      <div className="w-72 flex-shrink-0 bg-[#141414] border-r border-white/5 flex flex-col">
+        <div className="px-4 py-4 border-b border-white/5">
+          <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest">Detail</p>
+          <h2 className="text-[14px] font-semibold text-white/90 mt-0.5">本の詳細</h2>
         </div>
         <ScrollArea className="flex-1">
           {selectedBook ? (
-            <div className="px-4 py-5">
-              {/* カバー＋タイトル */}
-              <div className="flex gap-4 mb-5">
+            <div className="px-4 py-4">
+              <div className="flex gap-3 mb-4">
                 <BookCover title={selectedBook.title} author={selectedBook.author}
                   categoryId={selectedCategory} coverImage={selectedBook.coverImage} />
                 <div className="flex flex-col justify-center min-w-0 gap-0.5">
-                  <h3 className="text-[14px] font-bold text-gray-900 leading-snug">{selectedBook.title}</h3>
-                  <p className="text-[12px] text-gray-500">{selectedBook.author}</p>
-                  <StarRating rating={selectedBook.rating} />
-                  <p className="text-[11px] text-gray-400">読了 {selectedBook.readAt}</p>
+                  <h3 className="text-[13px] font-semibold text-white/90 leading-snug">{selectedBook.title}</h3>
+                  <p className="text-[11px] text-white/40">{selectedBook.author}</p>
+                  <span className="text-amber-400/80 text-[11px]">{"★".repeat(selectedBook.rating)}</span>
+                  <p className="text-[10px] text-white/25">読了 {selectedBook.readAt}</p>
                 </div>
               </div>
 
-              {/* ひと言まとめ */}
-              <div className="bg-gray-50 rounded-xl p-3.5 mb-5">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1.5">ひと言まとめ</p>
-                <p className="text-[13px] text-gray-700 leading-relaxed">{selectedBook.summary}</p>
+              <div className="bg-white/5 rounded-lg p-3 mb-4 border border-white/5">
+                <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest mb-1.5">ひと言まとめ</p>
+                <p className="text-[12px] text-white/65 leading-relaxed">{selectedBook.summary}</p>
               </div>
 
-              <Separator className="mb-4" />
+              <div className="h-px bg-white/5 mb-3" />
 
-              {/* 抜き書きリスト */}
               <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">抜き書き・活用ログ</p>
-                <Badge variant="secondary" className="text-[10px] h-4">{currentNotes.length} 件</Badge>
+                <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest">抜き書き・活用ログ</p>
+                <Badge variant="secondary" className="text-[9px] h-4 bg-white/5 text-white/30 border-0">{currentNotes.length} 件</Badge>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {currentNotes.map(note => (
                   <button key={note.id} onClick={() => setSelectedNote(note)}
-                    className={`w-full text-left px-3 py-2.5 rounded-xl border transition-all ${
+                    className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all ${
                       selectedNote?.id === note.id
-                        ? "bg-amber-50 border-amber-300 shadow-sm"
-                        : "bg-white border-gray-100 hover:border-amber-200 hover:bg-amber-50/30"
+                        ? "bg-amber-500/10 border-amber-500/25"
+                        : "bg-white/3 border-white/5 hover:border-amber-500/20 hover:bg-amber-500/5"
                     }`}>
-                    <p className="text-[12px] text-gray-800 leading-snug line-clamp-2 font-medium">{note.text}</p>
-                    <p className="text-[10px] text-gray-400 mt-1">{note.usedAt} に活用</p>
+                    <p className="text-[11px] text-white/70 leading-snug line-clamp-2">{note.text}</p>
+                    <p className="text-[9px] text-white/25 mt-1">{note.usedAt} に活用</p>
                   </button>
                 ))}
                 {currentNotes.length === 0 && (
-                  <p className="text-[12px] text-gray-400 py-2 text-center">まだメモがありません</p>
+                  <p className="text-[11px] text-white/25 py-2 text-center">まだメモがありません</p>
                 )}
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-sm text-gray-400 p-8 text-center">
+            <div className="flex items-center justify-center h-full text-[12px] text-white/20 p-8 text-center">
               左から本を選んでください
             </div>
           )}
@@ -339,41 +335,41 @@ export default function BookKnowledgeLibrary() {
       </div>
 
       {/* ═══ Pane 4 — Knowledge ═══ */}
-      <div className="flex-1 bg-[#fafaf8] flex flex-col min-w-0">
+      <div className="flex-1 bg-[#0d0d0d] flex flex-col min-w-0">
         {/* 検索バー */}
-        <div className="px-6 py-3.5 border-b border-gray-200/80 bg-white flex items-center gap-3">
-          <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-gray-400 focus-within:bg-white transition-colors">
-            <span className="text-gray-400 text-sm">🔍</span>
+        <div className="px-5 py-3 border-b border-white/5 flex items-center gap-3">
+          <div className="flex-1 flex items-center gap-2 bg-white/5 border border-white/8 rounded-lg px-3 py-2 focus-within:border-amber-500/30 transition-colors">
+            <span className="text-white/20 text-sm">⌕</span>
             <input type="text" placeholder="抜き書きをキーワード検索…"
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setSelectedNote(null); }}
-              className="flex-1 text-sm bg-transparent outline-none placeholder:text-gray-400 text-gray-700" />
+              className="flex-1 text-[13px] bg-transparent outline-none placeholder:text-white/20 text-white/70" />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-600 text-xs leading-none">✕</button>
+              <button onClick={() => setSearchQuery("")} className="text-white/20 hover:text-white/50 text-xs">✕</button>
             )}
           </div>
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest flex-shrink-0">Knowledge</p>
+          <p className="text-[9px] font-semibold text-white/20 uppercase tracking-widest flex-shrink-0">Knowledge</p>
         </div>
 
         {/* 検索結果 */}
         {searchQuery && (
-          <div className="border-b border-gray-200/80 bg-white/80 backdrop-blur-sm">
-            <div className="px-6 py-3">
-              <p className="text-[11px] text-gray-400 mb-2">{searchResults.length} 件ヒット</p>
+          <div className="border-b border-white/5 bg-[#111111]">
+            <div className="px-5 py-3">
+              <p className="text-[10px] text-white/25 mb-2">{searchResults.length} 件ヒット</p>
               <div className="space-y-1.5 pb-1">
                 {searchResults.map(n => {
                   const book = allBooks.find(b => b.id === n.bookId);
                   return (
                     <button key={n.id}
                       onClick={() => { setSearchQuery(""); setSelectedNote(n); const b = allBooks.find(b => b.id === n.bookId); if (b) setSelectedBook(b); }}
-                      className="w-full text-left bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 hover:border-amber-300 hover:bg-amber-50/30 transition-colors shadow-sm">
-                      <p className="text-[12px] font-semibold text-gray-800 line-clamp-1">{n.text}</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{book?.title} · {n.usedAt}</p>
+                      className="w-full text-left bg-white/3 border border-white/8 rounded-lg px-3.5 py-2.5 hover:border-amber-500/30 hover:bg-amber-500/5 transition-colors">
+                      <p className="text-[12px] font-medium text-white/75 line-clamp-1">{n.text}</p>
+                      <p className="text-[10px] text-white/30 mt-0.5">{book?.title} · {n.usedAt}</p>
                     </button>
                   );
                 })}
                 {searchResults.length === 0 && (
-                  <p className="text-[12px] text-gray-400 pb-1">該当する抜き書きがありません</p>
+                  <p className="text-[11px] text-white/25 pb-1">該当する抜き書きがありません</p>
                 )}
               </div>
             </div>
@@ -384,82 +380,72 @@ export default function BookKnowledgeLibrary() {
         {selectedNote && !searchQuery ? (
           <ScrollArea className="flex-1">
             <div className="px-6 py-6">
-              {/* 抜き書きカード */}
-              <div className="bg-white rounded-2xl border border-amber-200 shadow-sm p-5 mb-5">
+              <div className="bg-amber-500/8 rounded-xl border border-amber-500/15 p-5 mb-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-amber-500 text-base">✍️</span>
-                  <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">抜き書き</p>
-                  <span className="text-[10px] text-gray-300 ml-auto">クリックで編集</span>
+                  <p className="text-[9px] font-bold text-amber-400/70 uppercase tracking-widest">抜き書き</p>
+                  <span className="text-[9px] text-white/15 ml-auto">クリックで編集</span>
                 </div>
                 {editingNoteId === selectedNote.id ? (
-                  <textarea className="w-full text-[15px] text-gray-800 font-semibold leading-relaxed bg-amber-50 rounded-lg p-2 resize-none outline-none border border-amber-300"
+                  <textarea className="w-full text-[15px] text-white/80 font-medium leading-relaxed bg-white/5 rounded-lg p-2 resize-none outline-none border border-amber-500/30"
                     value={editText} onChange={e => setEditText(e.target.value)}
                     onBlur={() => setEditingNoteId(null)} autoFocus rows={3} />
                 ) : (
-                  <p className="text-[15px] text-gray-800 font-semibold leading-relaxed cursor-text hover:bg-amber-50 rounded-lg px-2 py-1 -mx-2 -my-1 transition-colors"
+                  <p className="text-[15px] text-white/80 font-medium leading-relaxed cursor-text hover:text-white/90 transition-colors"
                     onClick={() => { setEditingNoteId(selectedNote.id); setEditText(selectedNote.text); }}>
                     &ldquo;{selectedNote.text}&rdquo;
                   </p>
                 )}
               </div>
 
-              {/* 活用ログ */}
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
+              <div className="bg-white/3 rounded-xl border border-white/5 p-5 mb-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-blue-500 text-base">📋</span>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">活用ログ</p>
-                  <span className="ml-auto text-[11px] font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{selectedNote.usedAt}</span>
+                  <p className="text-[9px] font-bold text-white/25 uppercase tracking-widest">活用ログ</p>
+                  <span className="ml-auto text-[10px] text-white/25 bg-white/5 px-2 py-0.5 rounded-full">{selectedNote.usedAt}</span>
                 </div>
-                <p className="text-[13px] text-gray-700 leading-relaxed">{selectedNote.context}</p>
+                <p className="text-[13px] text-white/60 leading-relaxed">{selectedNote.context}</p>
               </div>
 
-              {/* 今日使えそうか？ */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-indigo-500 text-base">💡</span>
-                  <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">今日使えそうか？</p>
-                </div>
-                <textarea className="w-full text-[13px] text-gray-700 bg-transparent resize-none outline-none placeholder:text-gray-400 leading-relaxed"
-                  placeholder="今日の仕事・ジャーナリングでどう使えるかをメモする…" rows={3} />
+              <div className="bg-white/3 rounded-xl border border-white/5 p-5">
+                <p className="text-[9px] font-bold text-amber-400/50 uppercase tracking-widest mb-3">今日使えそうか？</p>
+                <textarea className="w-full text-[13px] text-white/60 bg-transparent resize-none outline-none placeholder:text-white/15 leading-relaxed"
+                  placeholder="今日の仕事・ジャーナリングでどう使えるかをメモする…" rows={4} />
               </div>
             </div>
           </ScrollArea>
         ) : !searchQuery ? (
-          /* 今日の1枚 */
           <div className="flex-1 flex flex-col justify-center px-6 py-6">
             <div className="w-full">
-              <div className="flex items-center gap-2 mb-4 justify-center">
-                <span className="text-lg">☀️</span>
-                <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">今日の1枚</p>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="h-px flex-1 bg-white/5" />
+                <p className="text-[9px] font-semibold text-white/20 uppercase tracking-widest">今日の1枚</p>
+                <div className="h-px flex-1 bg-white/5" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {/* 左：抜き書きテキスト */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col justify-between">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-amber-500/8 rounded-xl border border-amber-500/15 p-5 flex flex-col justify-between">
                   <div>
-                    <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-3">今日の抜き書き</p>
-                    <p className="text-[15px] font-semibold text-gray-800 leading-relaxed">
+                    <p className="text-[9px] font-bold text-amber-400/60 uppercase tracking-widest mb-3">今日の抜き書き</p>
+                    <p className="text-[14px] font-medium text-white/80 leading-relaxed">
                       &ldquo;{todayNote.text}&rdquo;
                     </p>
                   </div>
                   <button onClick={() => setSelectedNote(todayNote)}
-                    className="mt-4 self-start text-[12px] font-bold text-amber-600 hover:text-amber-700 transition-colors">
+                    className="mt-4 self-start text-[11px] font-semibold text-amber-400/70 hover:text-amber-300 transition-colors">
                     活用ログを見る →
                   </button>
                 </div>
-                {/* 右：本の情報 */}
-                <div className="bg-gradient-to-br from-[#0f1f3d]/5 to-[#0f1f3d]/10 rounded-2xl border border-[#0f1f3d]/10 p-6 flex items-center gap-5">
+                <div className="bg-white/3 rounded-xl border border-white/5 p-5 flex items-center gap-4">
                   {todayBook && (
                     <BookCover title={todayBook.title} author={todayBook.author}
                       categoryId={todayCatId} coverImage={todayBook.coverImage} />
                   )}
                   <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">出典</p>
-                    <p className="text-[14px] font-bold text-gray-800 leading-snug">{todayBook?.title}</p>
-                    <p className="text-[12px] text-gray-500 mt-0.5">{todayBook?.author}</p>
+                    <p className="text-[9px] font-bold text-white/20 uppercase tracking-widest mb-1">出典</p>
+                    <p className="text-[13px] font-semibold text-white/75 leading-snug">{todayBook?.title}</p>
+                    <p className="text-[11px] text-white/35 mt-0.5">{todayBook?.author}</p>
                   </div>
                 </div>
               </div>
-              <p className="text-[11px] text-gray-400 text-center mt-5">
+              <p className="text-[10px] text-white/15 text-center mt-5">
                 左から抜き書きを選ぶか、キーワードで検索してください
               </p>
             </div>
@@ -469,23 +455,23 @@ export default function BookKnowledgeLibrary() {
 
       {/* ═══ 本を追加モーダル ═══ */}
       {showAddBook && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={closeModal}>
-          <div className="bg-white rounded-3xl shadow-2xl p-6 w-[480px] mx-4 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-6 w-[480px] mx-4 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-base font-bold text-gray-900">本を追加</h3>
+              <h3 className="text-[15px] font-semibold text-white/90">本を追加</h3>
               <button onClick={closeModal}
-                className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition-colors">✕</button>
+                className="w-6 h-6 rounded-full bg-white/8 hover:bg-white/15 flex items-center justify-center text-white/40 text-xs transition-colors">✕</button>
             </div>
 
             {/* 検索モード切替 */}
-            <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-5">
+            <div className="flex gap-1 bg-white/5 rounded-lg p-1 mb-5">
               <button onClick={() => setSearchMode("title")}
-                className={`flex-1 py-1.5 rounded-lg text-[13px] font-semibold transition-all ${searchMode === "title" ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"}`}>
+                className={`flex-1 py-1.5 rounded-md text-[12px] font-medium transition-all ${searchMode === "title" ? "bg-amber-500/20 text-amber-300" : "text-white/35 hover:text-white/60"}`}>
                 タイトルで検索
               </button>
               <button onClick={() => setSearchMode("isbn")}
-                className={`flex-1 py-1.5 rounded-lg text-[13px] font-semibold transition-all ${searchMode === "isbn" ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"}`}>
+                className={`flex-1 py-1.5 rounded-md text-[12px] font-medium transition-all ${searchMode === "isbn" ? "bg-amber-500/20 text-amber-300" : "text-white/35 hover:text-white/60"}`}>
                 ISBNで検索
               </button>
             </div>
@@ -497,35 +483,35 @@ export default function BookKnowledgeLibrary() {
                   <input type="text" placeholder="例：イシューからはじめよ" value={titleInput}
                     onChange={e => setTitleInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleTitleSearch()}
-                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-gray-400 transition-colors" />
+                    className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/80 outline-none focus:border-amber-500/40 placeholder:text-white/20 transition-colors" />
                   <button onClick={handleTitleSearch} disabled={titleLoading}
-                    className="px-4 py-2 bg-[#0f1f3d] text-white text-sm rounded-xl hover:bg-[#1a3460] disabled:opacity-40 transition-all active:scale-95">
+                    className="px-4 py-2 bg-amber-500/20 text-amber-300 text-[12px] font-medium rounded-lg hover:bg-amber-500/30 disabled:opacity-40 transition-all active:scale-95">
                     {titleLoading ? "…" : "検索"}
                   </button>
                 </div>
 
                 {searchError && (
-                  <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-3">
-                    <p className="text-[12px] text-red-600 leading-relaxed">{searchError}</p>
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3 mb-3">
+                    <p className="text-[11px] text-red-400/80 leading-relaxed">{searchError}</p>
                   </div>
                 )}
 
                 {titleResults.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{titleResults.length} 件の候補</p>
+                  <div className="space-y-1.5">
+                    <p className="text-[9px] font-bold text-white/20 uppercase tracking-widest mb-2">{titleResults.length} 件の候補</p>
                     {titleResults.map((book, i) => (
                       <button key={i} onClick={() => { setIsbnPreview(book); setTitleResults([]); setTitleInput(""); }}
-                        className="w-full text-left flex gap-3 items-start p-3 rounded-xl border border-gray-100 hover:border-blue-300 hover:bg-blue-50/30 transition-all">
+                        className="w-full text-left flex gap-3 items-start p-3 rounded-lg border border-white/5 hover:border-amber-500/25 hover:bg-amber-500/5 transition-all">
                         {book.thumbnail
-                          ? <img src={book.thumbnail} alt={book.title} className="w-9 h-13 object-cover rounded shadow flex-shrink-0" style={{height:"52px"}} />
-                          : <div className="w-9 bg-gray-200 rounded flex-shrink-0" style={{height:"52px"}} />
+                          ? <img src={book.thumbnail} alt={book.title} className="w-9 object-cover rounded flex-shrink-0" style={{height:"52px"}} />
+                          : <div className="w-9 bg-white/10 rounded flex-shrink-0" style={{height:"52px"}} />
                         }
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-semibold text-gray-900 leading-snug line-clamp-2">{book.title}</p>
-                          <p className="text-[11px] text-gray-500 mt-0.5">{book.author || "著者不明"}</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5">{book.publisher}{book.publishedDate ? ` · ${book.publishedDate}` : ""}</p>
+                          <p className="text-[12px] font-medium text-white/80 leading-snug line-clamp-2">{book.title}</p>
+                          <p className="text-[10px] text-white/35 mt-0.5">{book.author || "著者不明"}</p>
+                          <p className="text-[10px] text-white/20 mt-0.5">{book.publisher}{book.publishedDate ? ` · ${book.publishedDate}` : ""}</p>
                         </div>
-                        <span className="text-[10px] text-blue-500 font-semibold flex-shrink-0 mt-1">選択 →</span>
+                        <span className="text-[10px] text-amber-400/60 font-medium flex-shrink-0 mt-1">選択 →</span>
                       </button>
                     ))}
                   </div>
@@ -540,9 +526,9 @@ export default function BookKnowledgeLibrary() {
                   <input type="text" placeholder="例：9784862760852" value={isbnInput}
                     onChange={e => setIsbnInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleIsbnLookup()}
-                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-gray-400 transition-colors" />
+                    className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/80 outline-none focus:border-amber-500/40 placeholder:text-white/20 transition-colors" />
                   <button onClick={handleIsbnLookup} disabled={isbnLoading}
-                    className="px-4 py-2 bg-[#0f1f3d] text-white text-sm rounded-xl hover:bg-[#1a3460] disabled:opacity-40 transition-all active:scale-95">
+                    className="px-4 py-2 bg-amber-500/20 text-amber-300 text-[12px] font-medium rounded-lg hover:bg-amber-500/30 disabled:opacity-40 transition-all active:scale-95">
                     {isbnLoading ? "…" : "検索"}
                   </button>
                 </div>
@@ -552,38 +538,38 @@ export default function BookKnowledgeLibrary() {
             {/* 選択済みプレビュー */}
             {isbnPreview && (
               <>
-                <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex gap-3 items-start mb-4">
+                <div className="bg-amber-500/8 border border-amber-500/20 rounded-lg px-4 py-3 flex gap-3 items-start mb-4">
                   {isbnPreview.thumbnail && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={isbnPreview.thumbnail} alt={isbnPreview.title}
-                      className="w-10 h-14 object-cover rounded-lg shadow flex-shrink-0" />
+                      className="w-10 h-14 object-cover rounded shadow flex-shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 leading-snug">{isbnPreview.title}</p>
-                    <p className="text-[12px] text-gray-500 mt-0.5">{isbnPreview.author}</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">{isbnPreview.publisher}{isbnPreview.publishedDate ? ` · ${isbnPreview.publishedDate}` : ""}</p>
-                    {isbnPreview.isbn && <p className="text-[10px] text-gray-300 mt-0.5">ISBN: {isbnPreview.isbn}</p>}
+                    <p className="text-[13px] font-medium text-white/85 leading-snug">{isbnPreview.title}</p>
+                    <p className="text-[11px] text-white/45 mt-0.5">{isbnPreview.author}</p>
+                    <p className="text-[10px] text-white/30 mt-0.5">{isbnPreview.publisher}{isbnPreview.publishedDate ? ` · ${isbnPreview.publishedDate}` : ""}</p>
+                    {isbnPreview.isbn && <p className="text-[9px] text-white/15 mt-0.5">ISBN: {isbnPreview.isbn}</p>}
                   </div>
-                  <button onClick={() => setIsbnPreview(null)} className="text-gray-300 hover:text-gray-500 text-xs flex-shrink-0">✕</button>
+                  <button onClick={() => setIsbnPreview(null)} className="text-white/20 hover:text-white/50 text-xs flex-shrink-0">✕</button>
                 </div>
 
-                <Separator className="mb-4" />
+                <div className="h-px bg-white/5 mb-4" />
 
-                <div className="space-y-2.5">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">登録情報を確認・編集</p>
+                <div className="space-y-2">
+                  <p className="text-[9px] font-bold text-white/20 uppercase tracking-widest">登録情報を確認・編集</p>
                   <input key={`t-${isbnPreview.title}`} type="text" placeholder="タイトル"
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-gray-400"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/80 outline-none focus:border-amber-500/40 transition-colors"
                     defaultValue={isbnPreview.title} />
                   <input key={`a-${isbnPreview.author}`} type="text" placeholder="著者"
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-gray-400"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/80 outline-none focus:border-amber-500/40 transition-colors"
                     defaultValue={isbnPreview.author} />
-                  <select className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-gray-400 text-gray-700">
+                  <select className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white/50 outline-none focus:border-amber-500/40 transition-colors">
                     <option value="">カテゴリを選択</option>
                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
 
-                <button className="w-full mt-5 py-2.5 bg-[#0f1f3d] text-white text-sm font-bold rounded-2xl hover:bg-[#1a3460] active:scale-[0.98] transition-all shadow-sm">
+                <button className="w-full mt-4 py-2.5 bg-amber-500/20 text-amber-300 text-[13px] font-semibold rounded-lg hover:bg-amber-500/30 active:scale-[0.98] transition-all border border-amber-500/20">
                   追加する（※現在はサンプル表示）
                 </button>
               </>
